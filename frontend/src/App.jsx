@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkAuthUser } from './store/authSlice';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Landing from './pages/Landing';
 import Forgot from './pages/Forgot';
 import Reset from './pages/Reset';
 import Dashboard from './pages/Dashboard';
@@ -106,9 +107,12 @@ function App() {
         <Route path="/forgot-password" element={<Forgot />} />
         <Route path="/reset-password" element={<Reset />} />
 
+        {/* Public Landing Page */}
+        <Route path="/" element={<Landing />} />
+
         {/* Protected Dashboard/EMS Routes */}
         <Route
-          path="/"
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <PortalLayout>

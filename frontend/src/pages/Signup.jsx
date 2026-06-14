@@ -85,7 +85,7 @@ const Signup = () => {
         email: formData.email,
         password: formData.password
       })).unwrap();
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setServerError(err || 'Registration failed');
     }

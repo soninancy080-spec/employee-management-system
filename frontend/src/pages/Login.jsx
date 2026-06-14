@@ -69,7 +69,7 @@ const Login = () => {
 
     try {
       await dispatch(loginUser({ email: formData.email, password: formData.password })).unwrap();
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       // Handled by useEffect matching reduxError or local catch
       setServerError(err || 'Invalid email or password');

@@ -18,8 +18,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // Redirect unauthorized users to index dashboard page
-    return <Navigate to="/" replace />;
+    // Redirect unauthorized users to dashboard page
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
