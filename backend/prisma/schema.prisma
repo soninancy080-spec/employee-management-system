@@ -1,0 +1,234 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+  HR
+  ADMIN
+}
+
+enum LeaveStatus {
+  PENDING_MANAGER
+  PENDING_HR
+  APPROVED
+  REJECTED
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  CASUAL
+  MATERNITY
+  PATERNITY
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  password     String
+  role         Role      @default(EMPLOYEE)
+  employee     Employee?
+  resetToken   String?   @map("reset_token")
+  resetExpires DateTime? @map("reset_expires")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Department {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  employees   Employee[]
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  @@map("departments")
+}
+
+model Skill {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  @@map("skills")
+}
+
+model Employee {
+  id           Int            @id @default(autoincrement())
+  name         String
+  email        String         @unique
+  phone        String?
+  profileImage String?        @map("profile_image")
+  resumePath   String?        @map("resume_path")
+  documents    String[]
+  departmentId Int?           @map("department_id")
+  department   Department?    @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  skills       Skill[]
+  userId       Int?           @unique @map("user_id")
+  user         User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  managerId    Int?           @map("manager_id")
+  manager      Employee?      @relation("ManagerEmployees", fields: [managerId], references: [id], onDelete: SetNull)
+  subordinates Employee[]     @relation("ManagerEmployees")
+  leaves       LeaveRequest[]
+  balances     LeaveBalance[]
+  allocations  AssetAllocation[]
+  alerts       Notification[]
+  semester     String?
+  city         String?
+  domain       String?
+  trackingMode String            @default("OFFLINE") @map("tracking_mode") // "ONLINE", "OFFLINE", "HYBRID"
+  grossSalary  Float             @default(15000) @map("gross_salary")
+  educationLevel String?         @map("education_level")
+  degree         String?
+  hardSkill      String?         @map("hard_skill")
+  softSkill      String?         @map("soft_skill")
+  address        String?
+  postalCode     String?         @map("postal_code")
+  taxNumber      String?         @map("tax_number")
+  nationality    String?
+  gender         String?
+  age            Int?
+  hireType       String?         @default("Full Time") @map("hire_type")
+  attendance       AttendanceRecord[]
+  evaluations      PerformanceEvaluation[] @relation("EmployeeEvaluations")
+  evaluationsGiven PerformanceEvaluation[] @relation("EvaluatorEvaluations")
+  createdAt        DateTime          @default(now()) @map("created_at")
+
+  @@index([city])
+  @@map("employees")
+}
+
+model LeaveRequest {
+  id           Int            @id @default(autoincrement())
+  employeeId   Int            @map("employee_id")
+  employee     Employee       @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType    LeaveType      @map("leave_type")
+  startDate    DateTime       @map("start_date")
+  endDate      DateTime       @map("end_date")
+  reason       String
+  status       LeaveStatus    @default(PENDING_MANAGER)
+  managerNotes String?        @map("manager_notes")
+  hrNotes      String?        @map("hr_notes")
+  histories    LeaveHistory[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+
+  @@index([employeeId])
+  @@index([status])
+  @@map("leave_requests")
+}
+
+model LeaveBalance {
+  id         Int       @id @default(autoincrement())
+  employeeId Int       @map("employee_id")
+  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType  LeaveType @map("leave_type")
+  allocated  Int       @default(15)
+  used       Int       @default(0)
+
+  @@unique([employeeId, leaveType])
+  @@map("leave_balances")
+}
+
+model LeaveHistory {
+  id             Int          @id @default(autoincrement())
+  leaveRequestId Int          @map("leave_request_id")
+  leaveRequest   LeaveRequest @relation(fields: [leaveRequestId], references: [id], onDelete: Cascade)
+  action         String       // "APPLIED", "MANAGER_APPROVED", "MANAGER_REJECTED", "HR_APPROVED", "HR_REJECTED"
+  performedById  Int          @map("performed_by_id")
+  notes          String?
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  @@map("leave_histories")
+}
+
+model Asset {
+  id           Int               @id @default(autoincrement())
+  name         String
+  serialNumber String            @unique @map("serial_number")
+  type         String            // "LAPTOP", "MONITOR", "IDCARD"
+  status       String            @default("AVAILABLE") // "AVAILABLE", "ALLOCATED", "UNDER_REPAIR"
+  allocations  AssetAllocation[]
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  @@index([status])
+  @@index([type])
+  @@map("assets")
+}
+
+model AssetAllocation {
+  id          Int       @id @default(autoincrement())
+  assetId     Int       @map("asset_id")
+  asset       Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  employeeId  Int       @map("employee_id")
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  allocatedAt DateTime  @default(now()) @map("allocated_at")
+  returnedAt  DateTime? @map("returned_at")
+  notes       String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("asset_allocations")
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  employeeId Int      @map("employee_id")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  title      String
+  message    String
+  isRead     Boolean  @default(false) @map("is_read")
+  type       String   // "LEAVE", "ASSET", "GENERAL"
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id            Int      @id @default(autoincrement())
+  action        String
+  entityName    String   @map("entity_name")
+  entityId      Int      @map("entity_id")
+  performedById Int?     @map("performed_by_id")
+  oldValues     Json?    @map("old_values")
+  newValues     Json?    @map("new_values")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([entityName, entityId])
+  @@map("audit_logs")
+}
+
+model AttendanceRecord {
+  id         Int      @id @default(autoincrement())
+  employeeId Int      @map("employee_id")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date       DateTime @db.Date
+  status     String   // "PRESENT", "ABSENT", "LATE"
+  lateReason String?  @map("late_reason")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([employeeId, date])
+  @@index([status])
+  @@map("attendance_records")
+}
+
+model PerformanceEvaluation {
+  id             Int      @id @default(autoincrement())
+  employeeId     Int      @map("employee_id")
+  employee       Employee @relation("EmployeeEvaluations", fields: [employeeId], references: [id], onDelete: Cascade)
+  evaluatorId    Int      @map("evaluator_id")
+  evaluator      Employee @relation("EvaluatorEvaluations", fields: [evaluatorId], references: [id], onDelete: Cascade)
+  rating         Int
+  feedback       String
+  evaluationDate DateTime @default(now()) @map("evaluation_date")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("performance_evaluations")
+}
