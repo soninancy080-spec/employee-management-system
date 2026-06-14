@@ -34,6 +34,36 @@ async function initDb() {
     } else {
       console.warn('db_init.sql not found in prisma folder.');
     }
+
+    // Auto-seed default departments if empty
+    const deptCount = await prisma.department.count();
+    if (deptCount === 0) {
+      const defaultDepts = [
+        { name: 'Engineering', description: 'Software engineering and product development' },
+        { name: 'Human Resources', description: 'Talent acquisition, operations, and culture' },
+        { name: 'Marketing', description: 'Growth, branding, and user acquisition' },
+        { name: 'Finance', description: 'Accounting, payroll, and financial planning' },
+        { name: 'Sales', description: 'Business development and customer success' }
+      ];
+      for (const dept of defaultDepts) {
+        await prisma.department.create({ data: dept });
+      }
+      console.log('Seeded default departments.');
+    }
+
+    // Auto-seed default skills if empty
+    const skillCount = await prisma.skill.count();
+    if (skillCount === 0) {
+      const defaultSkills = [
+        'React', 'Node.js', 'Prisma', 'PostgreSQL', 'JavaScript', 
+        'TypeScript', 'Python', 'CSS', 'Project Management', 
+        'Communication', 'Technical Support'
+      ];
+      for (const skillName of defaultSkills) {
+        await prisma.skill.create({ data: { name: skillName } });
+      }
+      console.log('Seeded default skills.');
+    }
   } catch (err) {
     console.error('Error executing database initialization:', err);
   }
