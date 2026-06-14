@@ -51,7 +51,7 @@ const Attendance = () => {
   // Fetch all employees (for directory & dropdowns)
   const fetchEmployees = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/employees?limit=100', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees?limit=100` , {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -69,7 +69,7 @@ const Attendance = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5001/api/v1/attendance/summary/${empId}?year=${summaryYear}&month=${summaryMonth}`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/attendance/summary/${empId}?year=${summaryYear}&month=${summaryMonth}` ,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -163,7 +163,7 @@ const Attendance = () => {
     const finalStatus = isLate ? 'LATE' : 'PRESENT';
     
     try {
-      const res = await fetch('http://localhost:5001/api/v1/attendance', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/attendance` , {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ const Attendance = () => {
     if (!selectedEmp) return;
 
     try {
-      const res = await fetch('http://localhost:5001/api/v1/attendance', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/attendance` , {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

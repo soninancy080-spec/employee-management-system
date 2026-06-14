@@ -99,7 +99,7 @@ const Salaries = () => {
 
   const fetchEmployees = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/employees?limit=100', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees?limit=100` , {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -117,7 +117,7 @@ const Salaries = () => {
     setError('');
     try {
       const res = await fetch(
-        `http://localhost:5001/api/v1/salaries/slip/${selectedEmpId}?year=${year}&month=${month}`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/salaries/slip/${selectedEmpId}?year=${year}&month=${month}` ,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -140,7 +140,7 @@ const Salaries = () => {
     setShowSlipModal(true);
     try {
       const res = await fetch(
-        `http://localhost:5001/api/v1/salaries/slip/${empId}?year=${year}&month=${month}`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/salaries/slip/${empId}?year=${year}&month=${month}` ,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -160,7 +160,7 @@ const Salaries = () => {
     setExportLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5001/api/v1/salaries/export?year=${year}&month=${month}`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/salaries/export?year=${year}&month=${month}` ,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       if (res.ok) {
@@ -189,7 +189,7 @@ const Salaries = () => {
     setSalarySaveLoading(true);
     setError('');
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/employees/${selectedEmpId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees/${selectedEmpId}` , {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -291,7 +291,7 @@ const Salaries = () => {
     }
     
     try {
-      const res = await fetch('http://localhost:5001/api/v1/salaries/run', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/salaries/run` , {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

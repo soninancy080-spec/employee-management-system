@@ -41,7 +41,7 @@ const Leaves = () => {
 
   const fetchMyLeavesAndBalances = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/leaves/my', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/leaves/my` , {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await res.json();
@@ -58,7 +58,7 @@ const Leaves = () => {
 
   const fetchPendingApprovals = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/leaves/pending', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/leaves/pending` , {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await res.json();
@@ -82,7 +82,7 @@ const Leaves = () => {
     setSuccess('');
 
     try {
-      const res = await fetch('http://localhost:5001/api/v1/leaves', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/leaves` , {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -122,7 +122,7 @@ const Leaves = () => {
 
     try {
       const endpoint = tier === 'manager' ? 'approve-manager' : 'approve-hr';
-      const res = await fetch(`http://localhost:5001/api/v1/leaves/${id}/${endpoint}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/leaves/${id}/${endpoint}` , {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

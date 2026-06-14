@@ -70,7 +70,7 @@ const Assets = () => {
         type: filterType,
         status: filterStatus
       });
-      const res = await fetch(`http://localhost:5001/api/v1/assets?${queryParams}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets?${queryParams}` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ const Assets = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('http://localhost:5001/api/v1/assets/allocations/my', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets/allocations/my` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ const Assets = () => {
 
   const fetchEmployees = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/employees?limit=100', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees?limit=100` , {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -145,8 +145,8 @@ const Assets = () => {
 
     try {
       const url = isEditing 
-        ? `http://localhost:5001/api/v1/assets/${selectedAsset.id}`
-        : 'http://localhost:5001/api/v1/assets';
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets/${selectedAsset.id}` 
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets` ;
       
       const method = isEditing ? 'PUT' : 'POST';
 
@@ -184,7 +184,7 @@ const Assets = () => {
     setError('');
     setSuccess('');
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/assets/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets/${id}` , {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -213,7 +213,7 @@ const Assets = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/assets/${selectedAsset.id}/allocate`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets/${selectedAsset.id}/allocate` , {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -245,7 +245,7 @@ const Assets = () => {
     setSuccess('');
 
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/assets/${id}/return`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/assets/${id}/return` , {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

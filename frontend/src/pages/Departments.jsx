@@ -24,7 +24,7 @@ const Departments = () => {
   const fetchDepartments = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/v1/departments', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/departments` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -71,8 +71,8 @@ const Departments = () => {
 
     try {
       const url = editId 
-        ? `http://localhost:5001/api/v1/departments/${editId}` 
-        : 'http://localhost:5001/api/v1/departments';
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/departments/${editId}`  
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/departments` ;
       const method = editId ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -107,7 +107,7 @@ const Departments = () => {
     setSuccess('');
 
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/departments/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/departments/${id}` , {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

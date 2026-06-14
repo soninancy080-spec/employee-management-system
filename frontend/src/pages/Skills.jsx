@@ -21,7 +21,7 @@ const Skills = () => {
   const fetchSkills = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/v1/skills', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/skills` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const Skills = () => {
     setSuccess('');
 
     try {
-      const res = await fetch('http://localhost:5001/api/v1/skills', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/skills` , {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -81,7 +81,7 @@ const Skills = () => {
     setSuccess('');
 
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/skills/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/skills/${id}` , {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

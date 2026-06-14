@@ -52,7 +52,7 @@ const Employees = () => {
       if (search) queryParams.append('search', search);
       if (deptFilter) queryParams.append('departmentId', deptFilter);
 
-      const res = await fetch(`http://localhost:5001/api/v1/employees?${queryParams.toString()}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees?${queryParams.toString()}` , {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -71,14 +71,14 @@ const Employees = () => {
   const fetchFilterOptions = async () => {
     try {
       // Fetch Departments
-      const deptRes = await fetch('http://localhost:5001/api/v1/departments', {
+      const deptRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/departments` , {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const deptData = await deptRes.json();
       if (deptRes.ok) setDepartments(deptData);
 
       // Fetch Skills
-      const skillRes = await fetch('http://localhost:5001/api/v1/skills', {
+      const skillRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/skills` , {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const skillData = await skillRes.json();
@@ -121,7 +121,7 @@ const Employees = () => {
     setProfileImageFile(null);
     setResumeFile(null);
     setDocsFiles([]);
-    setProfilePreview(emp.profileImage ? `http://localhost:5001${emp.profileImage}` : '');
+    setProfilePreview(emp.profileImage ? `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${emp.profileImage}`  : '');
     setError('');
     setShowModal(true);
   };
@@ -184,8 +184,8 @@ const Employees = () => {
 
     try {
       const url = editId 
-        ? `http://localhost:5001/api/v1/employees/${editId}` 
-        : 'http://localhost:5001/api/v1/employees';
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees/${editId}`  
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees` ;
       const method = editId ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -219,7 +219,7 @@ const Employees = () => {
     setSuccess('');
 
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/employees/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees/${id}` , {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -320,7 +320,7 @@ const Employees = () => {
                   <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                     {emp.profileImage ? (
                       <img 
-                        src={`http://localhost:5001${emp.profileImage}`} 
+                        src={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${emp.profileImage}` } 
                         alt={emp.name} 
                         className="avatar-large" 
                       />
@@ -387,7 +387,7 @@ const Employees = () => {
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--card-border)', paddingTop: '16px' }}>
                     {emp.resumePath && (
-                      <a href={`http://localhost:5001${emp.resumePath}`} target="_blank" rel="noreferrer" className="file-link">
+                      <a href={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${emp.resumePath}` } target="_blank" rel="noreferrer" className="file-link">
                         <FileText size={14} />
                         <span>Download Resume</span>
                       </a>
@@ -399,7 +399,7 @@ const Employees = () => {
                           <span>Documents ({emp.documents.length}):</span>
                         </span>
                         {emp.documents.map((doc, idx) => (
-                          <a key={idx} href={`http://localhost:5001${doc}`} target="_blank" rel="noreferrer" className="file-link" style={{ fontSize: '0.8rem', marginLeft: '16px' }}>
+                          <a key={idx} href={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${doc}` } target="_blank" rel="noreferrer" className="file-link" style={{ fontSize: '0.8rem', marginLeft: '16px' }}>
                             <span>Document {idx + 1}</span>
                           </a>
                         ))}

@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/dashboard/stats', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/dashboard/stats` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const Dashboard = () => {
   const fetchPendingCount = async () => {
     if (user && (user.role === 'MANAGER' || user.role === 'HR' || user.role === 'ADMIN')) {
       try {
-        const res = await fetch('http://localhost:5001/api/v1/leaves/pending', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/leaves/pending` , {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();

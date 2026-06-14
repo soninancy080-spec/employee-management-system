@@ -18,7 +18,7 @@ const NotificationBell = () => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/v1/notifications', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/notifications` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const NotificationBell = () => {
   const handleMarkRead = async (id, e) => {
     e.stopPropagation();
     try {
-      const res = await fetch(`http://localhost:5001/api/v1/notifications/${id}/read`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/notifications/${id}/read` , {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

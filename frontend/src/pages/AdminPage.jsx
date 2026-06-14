@@ -14,7 +14,7 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/v1/auth/users', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/auth/users` , {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

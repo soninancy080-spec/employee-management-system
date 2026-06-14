@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-const BASE_URL = 'http://localhost:5001/api/v1';
+const BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1` ;
 import { useSelector } from 'react-redux';
 import { 
   Star, MessageSquare, Calendar, UserCheck, 

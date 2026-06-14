@@ -34,7 +34,7 @@ const Profile = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('http://localhost:5001/api/v1/employees/profile/my', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees/profile/my` , {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ const Profile = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5001/api/v1/employees/profile/my', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees/profile/my` , {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -144,7 +144,7 @@ const Profile = () => {
     setSuccess('');
 
     try {
-      const res = await fetch('http://localhost:5001/api/v1/employees/profile/my', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/employees/profile/my` , {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -240,7 +240,7 @@ const Profile = () => {
             <div style={{ position: 'relative', marginTop: '-55px', marginBottom: '16px' }}>
               {profile.profileImage ? (
                 <img 
-                  src={`http://localhost:5001${profile.profileImage}`} 
+                  src={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${profile.profileImage}` } 
                   alt="" 
                   style={{ width: '110px', height: '110px', borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--card-bg)', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }} 
                 />
@@ -679,7 +679,7 @@ const Profile = () => {
                       <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: 500 }}>My_Resume.pdf</span>
                     </div>
                     <a 
-                      href={`http://localhost:5001${profile.resumePath}`} 
+                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${profile.resumePath}` } 
                       target="_blank" 
                       rel="noreferrer"
                       style={{ 
@@ -726,12 +726,12 @@ const Profile = () => {
                     {profile.documents.map((doc, idx) => (
                       <div key={idx} style={{ position: 'relative', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '8px', overflow: 'hidden' }}>
                         <img 
-                          src={`http://localhost:5001${doc}`} 
+                          src={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${doc}` } 
                           alt="" 
                           style={{ width: '100%', height: '100px', objectFit: 'cover' }} 
                         />
                         <a 
-                          href={`http://localhost:5001${doc}`} 
+                          href={`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}${doc}` } 
                           target="_blank" 
                           rel="noreferrer"
                           style={{

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const API_URL = 'http://localhost:5001/api/v1/auth';
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/v1/auth` ;
 
 // Helper to set headers
 const getHeaders = (token) => ({
